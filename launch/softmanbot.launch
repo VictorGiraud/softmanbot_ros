@@ -1,0 +1,15 @@
+<launch>
+
+	<node pkg="softmanbot_ros" name="softmanbot_supervisor_node" type="softmanbot_supervisor_node">
+	</node>
+
+	<node pkg="softmanbot_ros" name="softmanbot_genericPerception_node" type="softmanbot_genericPerception_node">
+	</node>
+	
+	<node pkg="softmanbot_ros" name="softmanbot_genericDeformationControl_node" type="softmanbot_genericDeformationControl_node">
+	</node>
+
+	<node pkg="softmanbot_ros" name="softmanbot_genericSkilledWorkcell_node" type="softmanbot_genericSkilledWorkcell_node">
+	</node>
+
+</launch>

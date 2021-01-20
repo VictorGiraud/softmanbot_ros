@@ -1,0 +1,4 @@
+string tagName
+uint8 valueToWrite
+---
+uint8 ret
