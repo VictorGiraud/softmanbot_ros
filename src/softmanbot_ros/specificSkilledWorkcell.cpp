@@ -9,9 +9,7 @@
 #include <stdint.h>
 
 #include <cmath>
-#include <SDL2/SDL.h>
 
-#include "zhelpers.hpp"
 
 #include "PLC.hpp"
 #include <string>
@@ -27,7 +25,6 @@
 #include "PoseRPY.h"
 
 
-void testZmqPub(void);
 static void testDualArm(void);
 //static SDL_Rect pointsToRect(Point pointToTransform);
 
@@ -528,22 +525,6 @@ void gripperClose(int gripperNumber)
 	return retval;
 }*/
 
-void testZmqPub(void)
-{
-	zmq::context_t context(1);
-    zmq::socket_t publisher(context, ZMQ_PUB);
-    publisher.bind("tcp://*:5563");
-
-    while (1) {
-        //  Write two messages, each with an envelope and content
-        s_sendmore (publisher, "A");
-        s_send (publisher, "We don't want to see this");
-        s_sendmore (publisher, "B");
-        s_send (publisher, "We would like to see this");
-        sleep (1);
-    }
-    return;
-}
 
 static void testDualArm(void)
 {

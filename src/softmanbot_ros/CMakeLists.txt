@@ -24,25 +24,6 @@ set(campero_ur_ip_controllers_DIR /home/victor/catkin_ws/devel/share/campero_ur_
 
 find_package(campero_ur_ip_controllers REQUIRED)
 
-## load in pkg-config support
-find_package(PkgConfig)
-## use pkg-config to get hints for 0mq locations
-pkg_check_modules(PC_ZeroMQ QUIET zmq)
-
-## use the hint from above to find where 'zmq.hpp' is located
-find_path(ZeroMQ_INCLUDE_DIR
-        NAMES zmq.hpp
-        PATHS ${PC_ZeroMQ_INCLUDE_DIRS}
-        )
-
-## use the hint from about to find the location of libzmq
-find_library(ZeroMQ_LIBRARY
-        NAMES zmq
-        PATHS ${PC_ZeroMQ_LIBRARY_DIRS}
-        )
-
-# https://stackoverflow.com/questions/45730098/cmake-leading-or-trailing-whitespace-policy-cmp0004
-string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -135,12 +116,11 @@ generate_messages(
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
+# catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES softmanbot_ros
-  CATKIN_DEPENDS campero_ur_ip_controllers
 #  DEPENDS system_lib
-)
+# )
 
 ###########
 ## Build ##
@@ -164,9 +144,9 @@ include_directories( ${catkin_INCLUDE_DIRS})
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(softmanbot_supervisor_node genericSupervisor.cpp genericSupervisor.hpp genericLogic.hpp specificSupervisor.cpp specificSupervisor.hpp PLC.cpp PLC.hpp)
-add_executable(softmanbot_genericDeformationControl_node genericDeformationControl.cpp genericDeformationControl.hpp specificDeformationControl.cpp specificDeformationControl.hpp genericLogic.hpp zhelpers.hpp)
+add_executable(softmanbot_genericDeformationControl_node genericDeformationControl.cpp genericDeformationControl.hpp specificDeformationControl.cpp specificDeformationControl.hpp genericLogic.hpp)
 add_executable(softmanbot_genericSkilledWorkcell_node genericSkilledWorkcell.cpp genericSkilledWorkcell.hpp specificSkilledWorkcell.cpp specificSkilledWorkcell.hpp genericLogic.hpp RPY.h PoseRPY.h  PLC.cpp PLC.hpp)
-add_executable(softmanbot_genericPerception_node genericPerception.cpp genericPerception.hpp specificPerception.cpp specificPerception.hpp genericLogic.hpp zhelpers.hpp)
+add_executable(softmanbot_genericPerception_node genericPerception.cpp genericPerception.hpp specificPerception.cpp specificPerception.hpp genericLogic.hpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -193,7 +173,6 @@ target_link_libraries(softmanbot_supervisor_node
 target_link_libraries(softmanbot_genericDeformationControl_node
    ${catkin_LIBRARIES}
    ${Boost_LIBRARIES}
-   ${ZeroMQ_LIBRARY}
 )
 
 target_include_directories(softmanbot_genericSkilledWorkcell_node PUBLIC ${ZeroMQ_INCLUDE_DIR})
@@ -201,8 +180,6 @@ target_include_directories(softmanbot_genericSkilledWorkcell_node PUBLIC ${ZeroM
 target_link_libraries(softmanbot_genericSkilledWorkcell_node
    ${catkin_LIBRARIES}
    ${Boost_LIBRARIES}
-   ${SDL2_LIBRARIES}
-   ${ZeroMQ_LIBRARY}
    ${PYTHON_LIBRARIES}
    ${campero_ur_ip_controllers}
 )
@@ -213,7 +190,6 @@ target_link_libraries(softmanbot_genericPerception_node
    ${catkin_LIBRARIES}
    ${Boost_LIBRARIES}
    ${PYTHON_LIBRARIES}
-   ${ZeroMQ_LIBRARY}
 )
 
 
