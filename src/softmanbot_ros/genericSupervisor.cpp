@@ -7,7 +7,6 @@
 #include "genericSupervisor.hpp"
 #include "specificSupervisor.hpp"
 
-#include "stdlib.h"
 
 softmanbotState	TaskPlanner_update			(void);
 
@@ -22,22 +21,12 @@ int main(int argc, char **argv)
 	
 	supervisoryInterface& supInt = getSupervisoryInterface();
 	
-	/*try
-	{
-		supInt.supervisoryInit();
-		supInt.supervisoryIdle();
-	}
-	catch(std::string exc)
-	{
-		std::cout << "caught this : " << exc << std::endl;
-	}*/	
-
 	//create a publisher object
 	ros::Publisher pub = nh.advertise<std_msgs::Int8>("supervisor_task", 50);
 	softmanbotState currentTask;
 	
 	//Loop at 50Hz until node shut down
-	ros::Rate rate(2);	
+	ros::Rate rate(50);	
 	while(ros::ok())
 	{
 		//Get current task, advertise it to other nodes
