@@ -143,9 +143,9 @@ include_directories( ${catkin_INCLUDE_DIRS})
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(softmanbot_supervisor_node genericSupervisor.cpp genericSupervisor.hpp genericLogic.hpp specificSupervisor.cpp specificSupervisor.hpp PLC.cpp PLC.hpp)
+add_executable(softmanbot_supervisor_node genericSupervisor.cpp genericSupervisor.hpp genericLogic.hpp specificSupervisor.cpp specificSupervisor.hpp)
 add_executable(softmanbot_genericDeformationControl_node genericDeformationControl.cpp genericDeformationControl.hpp specificDeformationControl.cpp specificDeformationControl.hpp genericLogic.hpp)
-add_executable(softmanbot_genericSkilledWorkcell_node genericSkilledWorkcell.cpp genericSkilledWorkcell.hpp specificSkilledWorkcell.cpp specificSkilledWorkcell.hpp genericLogic.hpp RPY.h PoseRPY.h  PLC.cpp PLC.hpp)
+add_executable(softmanbot_genericSkilledWorkcell_node genericSkilledWorkcell.cpp genericSkilledWorkcell.hpp specificSkilledWorkcell.cpp specificSkilledWorkcell.hpp genericLogic.hpp RPY.h PoseRPY.h)
 add_executable(softmanbot_genericPerception_node genericPerception.cpp genericPerception.hpp specificPerception.cpp specificPerception.hpp genericLogic.hpp)
 
 ## Rename C++ executable without prefix

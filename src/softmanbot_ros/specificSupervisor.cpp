@@ -7,6 +7,8 @@
 
 int get_state(void);
 
+softmanbotState previousReadState = IDLE; 
+
 softmanbotState state_machine(void)
 {
 	
