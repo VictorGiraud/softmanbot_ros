@@ -3,7 +3,7 @@
 
 #include <ros/ros.h>
 
-//This class is the template for the supervisory interface. You will have to create a specific interface inheriting from this one.
+//This class is the template for the perception interface. You will have to create a specific interface inheriting from this one.
 //Name of the skills are very generic. This way, if you want to reuse for anything, you will have access to 3 tasks with at least 3 skills each, not tied to original softmanbot application.
 
 class perceptionInterface

@@ -6,6 +6,7 @@
 //All specific should get this prototype needed by generic
 deformationControlInterface& 	getDeformationControlInterface(void);
 void							specificDeformationControlRosInit(void);
+void							specificDeformationControlSetSensor(std::string);
 
 //Custom declaration of inherited interface
 class michelinDeformationControlInterface: public deformationControlInterface

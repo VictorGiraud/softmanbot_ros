@@ -145,38 +145,7 @@ static void supervisoryCallback(const std_msgs::Int8::ConstPtr& msg)
 
 static void perceptionCallback(const std_msgs::String::ConstPtr& msg)
 {
-	//TODO : le faire passer au specific. C'est lui qui se debrouille avec.
 	sensorStringStream.str(msg->data); 
-
-	/*std::vector<pose> targetPoses;
-	std::stringstream ss;
-	boost::archive::text_oarchive oa(ss);
-	std_msgs::String msgToSend;
-
-	targetPoses = specificDeformationControl_multiLayerAssembly_getTargetPose(sensorStringStream.str());
-	//Stream to workcell		
-	oa << targetPoses;
-	msgToSend.data = ss.str();
-	pub.publish(msgToSend);*/	
+	specificDeformationControlSetSensor(sensorStringStream.str());	
 }
 
-/*
-deformation currentShape;
-ia >> currentShape; // sensor >> current shape;
-
-//recupere l'action du superviseur
-ros_get_stream(supervisor_order)
-//on stop le noeud en cas d'abort, de stop?
-get_current_task();
-grasping :
-	get_grasp_pose(currentShape);
-	send_grasp(desiredGraspingPose);//genere un vecteur de pose pour le grasp
-multiLayerAssembly :
-	//on a deja grasp, c'est pas a nous de verifier si le grasp a laché ou pas
-	std::vector<Poses> robotOrder = get_poses_from_deformation_plan(currentShape);
-	stringstream ss;
-	text_oarchive oa(ss);
-	oa << robotOrder;
-	ROS_Send(control, ss.str());
-demoulding :
-	//je gere ça plus tard*/
