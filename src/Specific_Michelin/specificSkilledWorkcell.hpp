@@ -10,7 +10,9 @@ skilledWorkcellInterface& 	getSkilledWorkcellInterface		(void);
 nodeID 						specificSkilledWorkcellGetMaster(void);
 void						specificSkilledWorkcellRosInit	(void);
 
-std::vector<pose> 			specificSkilledWorkcellControl(std::vector<pose> targetPoses, std::string sensorString);
+void						specificSkilledWorkcell_setSensor(std::string);
+
+void						specificSkilledWorkcellControl(std::string commandString, std::string sensorString);
 
 //Custom declaration of inherited interface
 class michelinSkilledWorkcellInterface: public skilledWorkcellInterface

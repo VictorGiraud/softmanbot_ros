@@ -54,6 +54,27 @@ public:
 	float pitch;
 	float yaw;
 	pose(){};
+	pose(float X, float Y, float Z): x(X), y(Y), z(Z) {};
+	pose& operator+=(const pose& rhs)
+	{
+		this->x += rhs.x;
+		this->y += rhs.y;
+		this->z += rhs.z;
+		this->roll += rhs.roll;
+		this->pitch += rhs.pitch;
+		this->yaw += rhs.yaw;
+		return *this;		
+	}	
+	pose& operator-=(const pose& rhs)
+	{
+		this->x -= rhs.x;
+		this->y -= rhs.y;
+		this->z -= rhs.z;
+		this->roll -= rhs.roll;
+		this->pitch -= rhs.pitch;
+		this->yaw -= rhs.yaw;
+		return *this;		
+	}	
 	~pose(){};
 	friend class boost::serialization::access;
     template<class Archive>
@@ -67,3 +88,22 @@ public:
 		ar & yaw;
 	}
 };
+
+class simplestMockupModel
+{
+public:
+	pose leftArmTargetPose;
+	pose rightArmTargetPose;
+	pose leftArmCurrentPose;
+	pose rightArmCurrentPose;	
+	friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & leftArmTargetPose;
+        ar & rightArmTargetPose;
+        ar & leftArmCurrentPose;
+        ar & rightArmCurrentPose;        
+	}
+};
+

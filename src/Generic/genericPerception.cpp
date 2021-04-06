@@ -2,11 +2,17 @@
 #include <std_msgs/Int8.h>
 #include "std_msgs/String.h"
 
+#include <time.h>// For sleep
+
+
 #include "specificPerception.hpp"
 #include "genericLogic.hpp"
 
+//Perception : Comment est l'environnement. Grasp en intimite avec l'actionneur. Reconstruction de la forme en lien avec la deformation
+
 static void supervisoryCallback			(const std_msgs::Int8::ConstPtr& msg);
-static softmanbotState currentOrder = IDLE;
+
+static softmanbotState currentOrder = INIT;
 
 int main(int argc, char **argv)
 {
@@ -18,13 +24,15 @@ int main(int argc, char **argv)
 
 	specificPerceptionRosInit();
 
+	//create a publisher object
+	//ros::Publisher pub = nh.advertise<std_msgs::string>("deformationControl_targetPose", 50);
 	perceptionInterface &percInt = getPerceptionInterface();
 	
 	//create a subscriber object : supervisor order
-	ros::Subscriber subSupervisoryState = nh.subscribe("supervisor_task", 50, supervisoryCallback);
+	ros::Subscriber subSupervisoryState = nh.subscribe("supervisor_task", 1, supervisoryCallback);
 
 
-	//Loop at 50Hz until node shut down
+	//Loop at 2Hz until node shut down
 	ros::Rate rate(50);	
 	while(ros::ok())
 	{		
@@ -113,8 +121,15 @@ int main(int argc, char **argv)
 			std::cout << "caught this : " << exc << std::endl;
 			exit(EXIT_FAILURE);
 		}
-
-		
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
 		ros::spinOnce();
 		rate.sleep();
 	}

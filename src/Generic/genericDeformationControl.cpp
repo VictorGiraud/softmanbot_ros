@@ -36,17 +36,18 @@ int main(int argc, char **argv)
 	deformationControlInterface &defInt = getDeformationControlInterface();
 
 	//create a publisher object
-	pub = nh.advertise<std_msgs::String>("deformationControl_targetPose", 500);
+	pub = nh.advertise<std_msgs::String>("deformationControl_targetPose", 1);
 	sensorStringStream.str("");
 	
 	//create a subscriber object
-	ros::Subscriber sub = nh.subscribe("supervisor_task", 50, supervisoryCallback);
-	ros::Subscriber sensorSub = nh.subscribe("specific_perception", 1000, perceptionCallback);
+	ros::Subscriber sub = nh.subscribe("supervisor_task", 1, supervisoryCallback);
+	ros::Subscriber sensorSub = nh.subscribe("specific_perception", 1, perceptionCallback);
 
 	//Loop at 50Hz until node shut down
 	ros::Rate rate(50);	
 	while(ros::ok())
 	{
+		ros::spinOnce();//Getting up to date data is good
 		try
 		{
 			switch(currentOrder)
@@ -134,6 +135,15 @@ int main(int argc, char **argv)
 		}
 
 		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
 		rate.sleep();
 	}
 }
@@ -145,7 +155,28 @@ static void supervisoryCallback(const std_msgs::Int8::ConstPtr& msg)
 
 static void perceptionCallback(const std_msgs::String::ConstPtr& msg)
 {
-	sensorStringStream.str(msg->data); 
-	specificDeformationControlSetSensor(sensorStringStream.str());	
+	std::string buffer = msg->data;//TODO clean
+
+	specificDeformationControl_setSensor(buffer);
 }
 
+/*
+deformation currentShape;
+ia >> currentShape; // sensor >> current shape;
+
+//recupere l'action du superviseur
+ros_get_stream(supervisor_order)
+//on stop le noeud en cas d'abort, de stop?
+get_current_task();
+grasping :
+	get_grasp_pose(currentShape);
+	send_grasp(desiredGraspingPose);//genere un vecteur de pose pour le grasp
+multiLayerAssembly :
+	//on a deja grasp, c'est pas a nous de verifier si le grasp a laché ou pas
+	std::vector<Poses> robotOrder = get_poses_from_deformation_plan(currentShape);
+	stringstream ss;
+	text_oarchive oa(ss);
+	oa << robotOrder;
+	ROS_Send(control, ss.str());
+demoulding :
+	//je gere ça plus tard*/

@@ -3,7 +3,6 @@
 
 #include "genericPerception.hpp"
 
-
 perceptionInterface& 	getPerceptionInterface		(void);
 void					specificPerceptionRosInit	(void);
 
@@ -21,5 +20,6 @@ public:
 	void perceptionGraspingT1S3(void) override;
 	void perceptionPerformT1S3(void) override;
 };
+
 
 #endif //SPECIFIC_PERCEPTION_HPP

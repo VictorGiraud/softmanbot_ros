@@ -11,7 +11,6 @@
 #include <vector>
 #include <boost/serialization/vector.hpp>
 
-ros::Publisher currentRobotPosPub;
 
 static std::stringstream sensorStringStream;
 
@@ -32,16 +31,14 @@ int main(int argc, char **argv)
 
 	ROS_INFO_STREAM("Starting generic skilled workcell");
 
-	//create a publisher object
-	currentRobotPosPub = nh.advertise<std_msgs::String>("currentRobotPose", 100);	
 	
 	//create a subscriber object
-	ros::Subscriber subSupervisoryState		= nh.subscribe("supervisor_task", 50, supervisoryCallback);	
-	ros::Subscriber subDeformationControl	= nh.subscribe("deformationControl_targetPose", 500, deformationControlCallback);
-	ros::Subscriber subPerceptionControl	= nh.subscribe("perceptionControl_targetPose", 500, perceptionControlCallback);
-	ros::Subscriber subSupervisoryControl	= nh.subscribe("supervisoryControl_targetPose", 500, supervisoryControlCallback);
+	ros::Subscriber subSupervisoryState		= nh.subscribe("supervisor_task", 1, supervisoryCallback);	
+	ros::Subscriber subDeformationControl	= nh.subscribe("deformationControl", 1, deformationControlCallback);
+	ros::Subscriber subPerceptionControl	= nh.subscribe("perceptionControl", 1, perceptionControlCallback);
+	ros::Subscriber subSupervisoryControl	= nh.subscribe("supervisoryControl", 1, supervisoryControlCallback);
 	
-	ros::Subscriber specificSensorSub  = nh.subscribe("specific_perception", 1000, sensorCallback);
+	ros::Subscriber specificSensorSub  = nh.subscribe("specific_perception", 1, sensorCallback);
 
 
 	specificSkilledWorkcellRosInit();
@@ -137,7 +134,15 @@ int main(int argc, char **argv)
 			std::cout << "caught this : " << exc << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		std::cout << "You spin me right round, baby right round"  << std::endl;
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
+		ros::spinOnce();
 		ros::spinOnce();
 		rate.sleep();
 	}
@@ -150,78 +155,55 @@ static void supervisoryCallback(const std_msgs::Int8::ConstPtr& msg)
 
 static void deformationControlCallback(const std_msgs::String::ConstPtr& msg)
 {
+	ROS_INFO("DeformationControl CB");
+
 	if(DEFORMATION_CONTROL == specificSkilledWorkcellGetMaster())
 	{
-		std::stringstream ss(msg->data);
+		/*std::stringstream ss(msg->data);
 		boost::archive::text_iarchive ia(ss);
 	
 		std::vector<pose> targetPoses;
 		std::vector<pose> currentStepPoses;
 	
-		ia >> targetPoses;
+		ia >> targetPoses;*/
+		std::string buffer = msg->data;//TODO clean
+		specificSkilledWorkcellControl(buffer, sensorStringStream.str());
 	
-		currentStepPoses = specificSkilledWorkcellControl(targetPoses, sensorStringStream.str());
-	
-		std::stringstream ssSend;
+		/*std::stringstream ssSend;
 		boost::archive::text_oarchive oa(ssSend);
 		std_msgs::String msgToSend;
 		oa << currentStepPoses;
 		msgToSend.data = ssSend.str();
-		currentRobotPosPub.publish(msgToSend);
+		currentRobotPosPub.publish(msgToSend);*/
 		//Stream de la targetPose recuperee par le genericSKilledWorkcell
 	}
 }
 
 static void perceptionControlCallback(const std_msgs::String::ConstPtr& msg)
 {
+	ROS_INFO("PerceptionControl CB");
 	if(PERCEPTION == specificSkilledWorkcellGetMaster())
 	{	
-		std::stringstream ss(msg->data);
-		boost::archive::text_iarchive ia(ss);
-	
-		std::vector<pose> targetPoses;
-		std::vector<pose> currentStepPoses;
-	
-		ia >> targetPoses;
-	
-		currentStepPoses = specificSkilledWorkcellControl(targetPoses, sensorStringStream.str());
-	
-		std::stringstream ssSend;
-		boost::archive::text_oarchive oa(ssSend);
-		std_msgs::String msgToSend;
-		oa << currentStepPoses;
-		msgToSend.data = ssSend.str();
-		currentRobotPosPub.publish(msgToSend);
-		//Stream de la targetPose recuperee par le genericSKilledWorkcell
+		std::string buffer = msg->data;//TODO clean
+		specificSkilledWorkcellControl(buffer, sensorStringStream.str());
 	}
 }
 
 static void supervisoryControlCallback(const std_msgs::String::ConstPtr& msg)
 {
+	ROS_INFO("SupervisorControl CB");
 	if(SUPERVISOR == specificSkilledWorkcellGetMaster())
 	{
-		std::stringstream ss(msg->data);
-		boost::archive::text_iarchive ia(ss);
-	
-		std::vector<pose> targetPoses;
-		std::vector<pose> currentStepPoses;
-	
-		ia >> targetPoses;
-	
-		currentStepPoses = specificSkilledWorkcellControl(targetPoses, sensorStringStream.str());
-	
-		std::stringstream ssSend;
-		boost::archive::text_oarchive oa(ssSend);
-		std_msgs::String msgToSend;
-		oa << currentStepPoses;
-		msgToSend.data = ssSend.str();
-		currentRobotPosPub.publish(msgToSend);
-		//Stream de la targetPose recuperee par le genericSKilledWorkcell
+		std::string buffer = msg->data;//TODO clean
+		specificSkilledWorkcellControl(buffer, sensorStringStream.str());
 	}
 }
 
 
 static void sensorCallback(const std_msgs::String::ConstPtr& msg)
 {
+	ROS_INFO("Sensor CB");
+
 	sensorStringStream.str(msg->data);
+	specificSkilledWorkcell_setSensor(msg->data);
 }
